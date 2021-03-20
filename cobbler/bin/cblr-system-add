@@ -1,0 +1,34 @@
+#!/usr/bin/env python3
+
+import yaml
+import argparse
+import subprocess
+
+info_file = '/etc/servers'
+with open(info_file, 'r') as f:
+    servers = yaml.safe_load(f.read())
+
+parser = argparse.ArgumentParser(description='Manage Cobbler System list')
+parser.add_argument(dest='testbox', metavar='hostname', help='testbox hostname')
+parser.add_argument(dest='profile', metavar='profile', help='cobbler profile name')
+args = parser.parse_args()
+
+host = args.testbox.upper()
+profile = args.profile
+name = host
+key  = 'bmc' + host
+ip = servers[key]['busiIP']
+mac = servers[key]['MAC1']
+
+cmds = [
+    'cobbler',
+    'system',
+    'add',
+    "--name=%s" % name,
+    "--hostname=%s" % host,
+    "--profile=%s" % profile,
+    "--ip-address=%s" % ip,
+    "--mac-address=%s" % mac
+]
+
+subprocess.run(cmds, shell=False, stderr=subprocess.STDOUT)

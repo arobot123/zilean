@@ -1,0 +1,58 @@
+#!/usr/bin/env python3
+#-*- coding: utf-8 -*-
+#
+# output: /etc/servers
+# backup: /etc/servers.bak
+#
+# Attention: backup servers file before update
+
+import yaml
+import subprocess
+import re
+
+# info file to update
+update_file = '/root/update'
+# object file
+info_file = '/etc/servers'
+# backup file
+bak_file = '/etc/servers.bak'
+
+pattern = re.compile(r"bmc(\w(\d+)\-(\d+))")
+
+# remove unexpected chars
+subprocess.run(["[ ! -s %s ] || sed -i '/Unreachable/d;/FAIL/d' %s" % (update_file, update_file)], shell=True)
+
+print('Updating servers info...')
+
+with open(info_file, 'r') as f:
+        data = yaml.safe_load(f.read())
+with open(update_file, 'r') as f:
+        d = yaml.safe_load(f.read())
+
+try:
+        with open(info_file, 'w') as f:
+                # update one server info
+                for server in list(data.keys()):
+                        if not data[server]:
+                                continue
+                        res = pattern.findall(server)
+                        h, c, s = res[0]
+                        data[server]['HostName'] = h
+                        data[server]['bmcIP']= '172.18.%s.%s' % (c, s)
+                        data[server]['busiIP'] = '192.18.%s.%s' % (c, s)
+                        if not d:
+                                continue
+                        for key in list(d[server].keys()):
+                                if key not in data[server].keys() or d[server][key] != data[server][key]:
+                                        data[server][key] = d[server][key]
+                if d:
+                        # add a new server info
+                        for server in list(d.keys()):
+                                if server not in data.keys():
+                                        data[server] = d[server]
+                yaml.dump(data, f)
+except Exception as e:
+        print('error occurred:', e)
+        subprocess.run(['cp %s %s' % (bak_file, info_file)], shell=True)
+
+print('Done.')

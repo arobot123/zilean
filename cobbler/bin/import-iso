@@ -1,0 +1,47 @@
+#!/bin/sh -e
+
+[ 3 -ne "$#" ] && {
+	echo "Usage: $0 <iso_file> <os_name> <os_version>"
+	exit
+}
+
+iso_file=$1
+os=$2
+os_version=$3
+dst_mnt_dir=/mnt
+[ -f "$iso_file" ] || exit
+[ -n "$os" ] || exit
+[ -n "$os_version" ] || exit
+echo $iso_file | grep -Eq 'arm64|aarch64' && os_arch=aarch64
+echo $iso_file | grep -Eq 'amd64|x86_64' && os_arch=x86_64
+[ -n "$os_arch" ] || exit
+[ -d "$dst_mnt_dir" ] || mkdir -p $dst_mnt_dir
+
+echo "mounting $iso_file to $dst_mnt_dir"
+mount -o loop,ro $iso_file $dst_mnt_dir
+
+echo "importing $iso_file"
+cobbler import --path=$dst_mnt_dir --name=$os-$os_version --arch=$os_arch
+
+echo "un-mounting $dst_mnt_dir"
+umount $dst_mnt_dir
+
+update_info() {
+	local iso_map=/home/map
+	local md5sum_map=/home/md5sum
+	local iso_name=$(basename $iso_file)
+	local line
+
+	[ -f "$iso_map" ] || touch $iso_map
+	[ -f "$md5sum_map" ] || touch $md5sum_map
+	line=$(sed -n "/$iso_name: /=" $md5sum_map)
+	if [ -n "$line" ] ; then
+		sed -i 's|$iso_name: *|$iso_name: $(md5sum $iso_file)|g' $md5sum_map
+	else
+		echo "$(md5sum $iso_file)" >> $md5sum_map
+	fi
+	line=$(sed -n "/$iso_name: $os\/$os_arch\/$os_version/=" $iso_map)
+	[ -n "$line" ] || echo "$iso_name: $os/$os_arch/$os_version" >> $iso_map
+}
+
+update_info

@@ -1,0 +1,38 @@
+#!/usr/bin/env python3
+
+import argparse
+import subprocess
+import yaml
+
+parser = argparse.ArgumentParser(description='Show server(s) information in /etc/servers')
+parser.add_argument(dest='testbox', metavar='testbox', nargs='*', help='testbox hostname', default='all')
+args = parser.parse_args()
+
+info_file = '/etc/servers'
+with open(info_file, 'r') as f:
+        data = yaml.safe_load(f.read())
+
+number = 0
+testboxes = args.testbox
+if 'all' == testboxes:
+        number = len(data)
+        for server, info in data.items():
+                print(server + ':')
+                if not info:
+                        continue
+                for key, value in info.items():
+                        print('\t', key + ':', value)
+else:
+        for server in list(testboxes):
+                server = 'bmc' + server.upper()
+                if server not in data.keys():
+                        print(server, "not found!")
+                        continue
+                number += 1
+                print(server + ':')
+                if not data[server]:
+                        continue
+                for key, value in data[server].items():
+                        print('\t', key + ':', value)
+
+print("\n%s server(s) information listed." % number)

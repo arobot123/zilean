@@ -1,0 +1,28 @@
+#!/usr/bin/env python3
+
+import argparse
+import subprocess
+
+parser = argparse.ArgumentParser(description='Manage Cobbler Profile list')
+parser.add_argument('-n', '--name', nargs='?', help='cobbler profile name')
+args = parser.parse_args()
+
+cmds = [
+    'cobbler',
+    'system'
+]
+
+name = args.name
+if name == None:
+        append = [
+                'list'
+        ]
+else:
+        append = [
+                'report',
+                '--name=%s' % name
+        ]
+
+cmds += append
+
+subprocess.run(cmds, shell=False, stderr=subprocess.STDOUT)

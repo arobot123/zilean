@@ -1,0 +1,50 @@
+#!/bin/sh -e
+
+#enable tftp
+object=/etc/xinetd.d/tftp
+line=$(sed -n '/disable/=' $object)
+sed -i "${line}s/yes/no/" $object
+systemctl restart xinetd
+
+#config httpd
+cp /usr/local/python3/lib/python3.8/site-packages/mod_wsgi/server/mod_wsgi-py38.cpython-38-aarch64-linux-gnu.so \
+   /etc/httpd/modules/mod_wsgi_py38.so
+object=/etc/httpd/conf/httpd.conf
+line=$(sed -n '/Include conf.modules.d/=' $object)
+sed -i "${line}i\LoadModule wsgi_module modules\/mod_wsgi_py38.so\n" $object
+systemctl restart httpd
+
+#config cobblerd
+object=/usr/local/python3/share/cobbler/web/settings.py
+#SECRET_KEY
+line=$(sed -n '/SECRET_KEY /=' $object)
+sed -i "${line}c SECRET_KEY \= 'abcdefghijklmnopqrstuvwxyz0123456789qscvgyujklcfdhuvifre'" $object
+#TIME_ZONE
+line=$(sed -n '/TIME_ZONE /=' $object)
+sed -i "${line}c TIME_ZONE \= 'Asia/Shanghai'" $object
+#BASE_DIR
+line=$(sed -n '/Django settings for cobbler-web project/=' $object)
+sed -i "${line}i\import os\nBASE_DIR \= os.path.dirname\(os.path.abspath\(__file__\)\)" $object
+sed -i "s|\'\/usr/share\/cobbler\/web\/templates\'\,|os.path.join\(BASE_DIR\, \'templates\'\)\, \# \'\/usr\/share\/cobbler\/web\/templates\'\,|g" $object
+
+#module cgi has no attribute parse qs
+object=/var/www/cobbler/svc/services.py
+sed -i "s|cgi.parse_qs|urllib.parse.parse_qs|g" $object
+
+#grub boot cmds
+files=(
+	'/etc/cobbler/boot_loader_conf/grubprofile.template'
+	'/etc/cobbler/boot_loader_conf/grubsystem.template'
+)
+for f in ${files[@]} ; do
+	sed -i 's|clinux |linux |g' $f
+	sed -i 's|cinitrd |initrd |g' $f
+done
+sed -i 's|linux $kernel_path|linux $kernel_path console=tty0 console=ttyS0,115200n8|g' ${files[1]}
+
+#cobbler_web authentication
+#user: root
+sed -i 's|^cobbler:|root:|g' users.digest
+#password: Kun9eng@z9
+#interactive
+htdigest -c /etc/cobbler/users.digest Cobbler root

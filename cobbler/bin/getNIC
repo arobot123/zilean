@@ -1,0 +1,9 @@
+#!/bin/sh
+
+$HOME/bin/chkBmc $1 || exit
+
+source '/root/.config/accnt.info'
+
+TM2=$(ipmitool -I lanplus -H $1 -U $BMC_USER -P $BMC_PASSWD fru | grep 'TM2' | awk '{gsub(/[\(\)]+/," ",$0) ; print $7}' | tr '\n' ' ')
+SP5=$(ipmitool -I lanplus -H $1 -U $BMC_USER -P $BMC_PASSWD fru | grep 'SP5' | awk '{print $5}' | tr '\n' ' ')
+printf "%4c%s: %s\n" "    " NIC "$TM2 $SP5"

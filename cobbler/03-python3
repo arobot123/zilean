@@ -1,0 +1,33 @@
+#!/bin/sh -e
+
+#python3.8.2
+wget https://www.python.org/ftp/python/3.8.2/Python-3.8.2.tgz
+tar zxf Python-3.8.2.tgz
+cd Python-*
+./configure --prefix=/usr/local/python3 --enable-shared --enable-optimizations --enable-loadable-sqlite-extensions
+make -j 96 && make install
+ln -s /usr/local/python3/bin/python3 /usr/bin/python3
+ln -s /usr/local/python3/bin/pip3    /usr/bin/pip3
+cp libpython3.8.so.1.0 /usr/lib
+cp libpython3.8.so.1.0 /usr/lib64
+cp libpython3.8.so.1.0 /usr/local/lib64
+python3 -m pip install -U pip
+pip3 -V
+
+#pip3 config
+mkdir $HOME/.pip
+cat >> $HOME/.pip/pip.conf << EOF
+[global]
+install-url=https://mirrors.huaweicloud.com/repository/pypi/simple
+            https://pypi.tuna.tsinghua.edu.cn/simple
+            http://mirrors.aliyun.com/pypi/simple
+            https://pypi.org/project
+[install]
+trusted-host=http://pypi.org
+             https://mirrors.huaweicloud.com
+             https://pypi.tuna.tsinghua.edu.cn
+             http://mirrors.aliyun.com
+EOF
+
+#python3 packages
+pip3 install future distro pyyaml netaddr tornado simplejson cheetah3 django dnspython3 ldap3 pymongo mod_wsgi coverage sphinx

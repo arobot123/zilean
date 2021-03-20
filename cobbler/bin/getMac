@@ -1,0 +1,17 @@
+#!/bin/sh
+
+$HOME/bin/chkBmc $1 || exit
+
+source '/root/.config/accnt.info'
+
+arch=$($HOME/bin/getCpu $1 | grep ARCH | cut -d: -f2)
+[ -z "$arch" ] && exit
+
+for i in {1..4}
+do
+        [ $arch == 'aarch64' ] &&
+        	mac=$(ipmitool -I lanplus -H $1 -U $BMC_USER -P $BMC_PASSWD raw 0x30 0x90 0x01 0x03 0x0$i 0x00 |awk '{printf "%s:%s:%s:%s:%s:%s\n", $5,$6,$7,$8,$9,$10}')
+        [ $arch == 'x86_64' ] &&
+        	mac=$(ipmitool -I lanplus -H $1 -U $BMC_USER -P $BMC_PASSWD raw 0x30 0x90 0x01 0x00 0x0$i 0x00 |awk '{printf "%s:%s:%s:%s:%s:%s\n", $5,$6,$7,$8,$9,$10}')
+        printf "%4c%s: %s\n" "    " MAC$i $mac
+done

@@ -1,0 +1,11 @@
+#!/bin/sh
+
+$HOME/bin/chkBmc $1 || exit
+
+source '/root/.config/accnt.info'
+
+cnt=0
+for i in {0..36} ; do
+	ipmitool -I lanplus -H $1 -U $BMC_USER -P $BMC_PASSWD raw 0x30 0x93 0xdb 0x07 0x00 0x27 2 $i 2 0 255 | grep -wq 01 && cnt=$((cnt + 1))
+done
+printf "%4c%s: %d\n" "    " DiskNum $cnt

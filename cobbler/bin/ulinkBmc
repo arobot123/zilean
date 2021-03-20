@@ -1,0 +1,7 @@
+#!/bin/sh -e
+
+$HOME/bin/chkBmc $1 || exit
+
+source '/root/.config/accnt.info'
+
+ipmitool -I lanplus -H $1 -I lanplus -U $BMC_USER -P $BMC_PASSWD sol deactivate

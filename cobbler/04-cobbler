@@ -1,0 +1,52 @@
+#!/bin/sh -e
+
+#make install
+wget https://github.com/cobbler/cobbler/archive/v3.1.1.tar.gz
+tar zxf v3.1.1.tar.gz
+cd cobbler*
+make && make install
+
+#make devinstall
+cp -R /var/lib/cobbler/collections/ /var/lib/cobbler/cobbler_collections
+make devinstall
+
+#enable cobblerd service
+ln -s /usr/local/python3/bin/cobblerd /etc/rc.d/init.d/cobblerd
+ln -s /usr/local/python3/bin/cobblerd /usr/bin/cobblerd
+ln -s /usr/local/python3/bin/cobbler  /usr/bin/cobbler
+sed '1a\# chkconfig: 2345 10 90\n# description: cobblerd service' /etc/rc.d/init.d/cobblerd
+chkconfig cobblerd on
+
+#change ServerName
+line=$(sed -n '/ServerName www/=' /etc/httpd/conf/httpd.conf)
+ipadd=$(ip route get 1.2.3.4 | awk '{print $7 ; exit}')
+sed -i "${line}a\ServerName ${ipadd}:80" /etc/httpd/conf/httpd.conf
+
+#add HTTPS
+line=$(sed -n '/Alias \/cobbler_webui_content/=' /etc/httpd/conf.d/cobbler_web.conf)
+sed -i "${line}a\RewriteEngine on\nRewriteCond %{HTTPS} off\nRewriteCond %{REQUEST_URI} ^\/cobbler_web\nRewriteRule \(.*\) https\:\/\/%{HTTP_HOST}%{REQUEST_URI}" /etc/httpd/conf.d/cobbler_web.conf
+#add HTTPS cert&key
+line=$(sed -n '/\<VirtualHost /=' /etc/httpd/conf.d/cobbler_web.conf)
+sed -i "${line}a\SSLCertificateFile \/etc\/pki\/tls\/certs\/localhost.crt\nSSLCertificateKeyFile \/etc\/pki\/tls\/private\/localhost.key" /etc/httpd/conf.d/cobbler_web.conf
+
+#make webtest
+make webtest
+
+#check
+cobbler check
+
+#fix: The 'server' field in /etc/cobbler/settings
+sed -i "/^server\: 127.0.0.1/cserver\: $ipaddr" /etc/cobbler/settings
+#fix: For PXE to be functional, the 'next_server' field in /etc/cobbler/settings
+sed -i "/^next_server\: 127.0.0.1/cnext_server\: $ipaddr" /etc/cobbler/settings
+#fix: some network boot-loaders are missing from /var/lib/cobbler/loaders
+cobbler get-loaders
+#fix: debmirror package is not installed
+yum install -y debmirror
+sed -i '/@dists=*/s/^/# /' /etc/debmirror.conf
+sed -i '/@arches=*/s/^/# /' /etc/debmirror.conf
+#fix: The default password used by the sample templates for newly installed machines
+passwd=$(openssl passwd -1 -salt 'random-phrase-here' 'Huawei12#$')
+sed -i "/default_password_crypted: */cdefault_password_crypted: \"${passwd}\"" /etc/cobbler/settings
+
+cobbler check

@@ -1,0 +1,23 @@
+#!/usr/bin/env python3
+#-*- coding: utf-8 -*-
+#
+# output: /etc/servers
+# backup: /etc/servers.bak
+
+import yaml
+import subprocess
+
+info_file = '/etc/servers'
+raw_file  = '/etc/servers.ori'
+
+print('Collecting servers info, wait several minutes please...')
+subprocess.run(['batch-do getRsrc > %s' % raw_file], shell=True)
+# remove unexpected chars
+subprocess.run(["sed -i '/Unreachable/d;/FAIL/d' %s" % raw_file], shell=True)
+
+with open(raw_file, 'r') as f:
+        data = yaml.safe_load(f.read())
+with open(info_file, 'w') as f:
+        yaml.dump(data, f)
+
+print('save servers info to', info_file)

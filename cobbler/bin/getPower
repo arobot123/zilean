@@ -1,0 +1,8 @@
+#!/bin/sh
+
+$HOME/bin/chkBmc $1 || exit
+
+source '/root/.config/accnt.info'
+
+status=$(ipmitool -H $1 -I lanplus -U $BMC_USER -P $BMC_PASSWD power status |awk '{print $NF}')
+printf "%4c%s: %s\n" "    " PowerStatus \'$status\'

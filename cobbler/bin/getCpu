@@ -1,0 +1,17 @@
+#!/bin/sh
+
+$HOME/bin/chkBmc $1 || exit
+
+source '/root/.config/accnt.info'
+
+info=$(ipmitool -I lanplus -H $1 -U $BMC_USER -P $BMC_PASSWD fru | grep -i configuration | cut -d\( -f2 )
+info=${info% *}
+socket=$(echo $info | cut -d* -f1)
+name=$(echo $info | cut -d, -f1 | cut -d* -f2)
+core=$(echo $info | cut -d, -f2)
+arch=
+echo $name | grep -iEq 'kunpeng' && arch=aarch64
+echo $name | grep -iEq 'intel'   && arch=x86_64
+
+printf "%4c%s: %d*%d %s\n" "    " CPU $socket $core ${name/ /}
+printf "%4c%s: %s\n" "    " ARCH $arch

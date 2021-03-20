@@ -1,0 +1,13 @@
+#!/bin/sh
+
+[ "$#" -eq 1 ] || exit
+
+trap 'exit 1' SIGINT
+
+while read line
+do
+	echo $line | grep -iq bmc || continue
+	server=$(echo $line | awk '{print $2}')
+        echo "$server:"
+	$@ $server
+done < /etc/hosts

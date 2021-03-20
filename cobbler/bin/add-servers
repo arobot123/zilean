@@ -1,0 +1,25 @@
+#!/bin/sh
+#
+# update /etc/hosts file such as:
+# N1-1    192.18.1.1
+# bmcN1-1 172.18.1.1
+
+prefix=(
+	'N    192.18'
+	'bmcN 172.18'
+)
+
+for idx in ${!prefix[@]}
+do
+	
+	host_prefix=$(echo ${prefix[$idx]} | awk '{print $1}')
+	ip_prefix=$(echo ${prefix[$idx]} | awk '{print $2}')
+	for c in {1..14}
+	do
+		for s in {1..12}
+		do
+			grep -wq "${ip_prefix}.$c.$s" /etc/hosts ||
+			echo -e "${ip_prefix}.$c.$s\t\t${host_prefix}$c-$s" >> /etc/hosts
+		done
+	done
+done

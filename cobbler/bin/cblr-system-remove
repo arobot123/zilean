@@ -1,0 +1,24 @@
+#!/usr/bin/env python3
+
+import yaml
+import argparse
+import subprocess
+
+info_file = '/etc/servers'
+with open(info_file, 'r') as f:
+    servers = yaml.safe_load(f.read())
+
+parser = argparse.ArgumentParser(description='Manage Cobbler System list')
+parser.add_argument(dest='name', metavar='name', help='cobbler system name')
+args = parser.parse_args()
+
+name = args.name
+
+cmds = [
+    'cobbler',
+    'system',
+    'remove',
+    "--name=%s" % name,
+]
+
+subprocess.run(cmds, shell=False, stderr=subprocess.STDOUT)

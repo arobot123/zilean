@@ -1,0 +1,23 @@
+#!/bin/sh
+
+$HOME/bin/chkBmc $1 || exit
+
+[ 0 -eq $# ] && {
+	echo "Usage: $0 <BMC_IP1> [BMC_IP2] ..."
+	exit
+}
+
+source '/root/.config/accnt.info'
+
+for server in $@
+do
+	echo "$server:"
+	$HOME/bin/getSN  	$server
+	$HOME/bin/getCpu 	$server
+	$HOME/bin/getMem 	$server
+	$HOME/bin/getDisk	$server
+	$HOME/bin/getPower 	$server
+	$HOME/bin/getNIC 	$server
+	$HOME/bin/getRaid	$server
+	$HOME/bin/getMac 	$server
+done

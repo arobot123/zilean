@@ -1,0 +1,9 @@
+#!/bin/sh
+
+$HOME/bin/chkBmc $1 || exit
+
+source '/root/.config/accnt.info'
+
+mem=$(ipmitool -I lanplus -H $1 -U $BMC_USER -P $BMC_PASSWD sdr elist | grep DIMM | grep Detected | wc -l)
+cnt=$(ipmitool -I lanplus -H $1 -U $BMC_USER -P $BMC_PASSWD sdr elist | grep DIMM | head -n 1 | awk '{printf "%d\n",$7 ; exit}')
+printf "%4c%s: %s\n" "    " Mem $((mem * cnt))GB

@@ -1,0 +1,19 @@
+#!/bin/sh
+set -e
+
+repos_path=/c
+authors=('angus_robot' 'szchao' 'shizhichao' 'Shi Zhichao')
+output=$HOME/code_stat
+
+> $output
+for repo in $(ls $repos_path)
+do
+	echo "repo: $repo" >> $output
+	for user in ${authors[@]}
+	do
+		echo -e "\tuser: $user" >> $output
+		[ -d "$repos_path/$repo/.git" ] || continue
+		cd $repos_path/$repo
+		git log --author="$user" --pretty=tformat: --numstat | gawk '{add += $1; subs += $2; loc += $1 - $2} END {printf "\tadded:%s deleted:%s total:%s\n",add,subs,loc}' >> $output
+	done
+done

@@ -1,0 +1,10 @@
+#!/bin/sh -e
+
+$HOME/bin/chkBmc $1 || exit
+
+log_path=$HOME/logs
+[ -d "$log_path" ] || mkdir -p $log_path
+
+source '/root/.config/accnt.info'
+
+ipmitool -I lanplus -H $1 -I lanplus -U $BMC_USER -P $BMC_PASSWD sol activate |tee -a $log_path/${1}_$(date +'%Y%m%d')

@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# do three times at least
+yum install -y gcc pciutils wget curl unzip zlib-devel bzip2-devel openssl openssl-devel ncurses-devel libffi-devel epel-release jq net-tools dnsmasq yum-utils git fence-agents dhcp httpd httpd-devel rsync xinetd tftp-server createrepo pykickstart mod_ssl mod_wsgi sqlite-devel expect

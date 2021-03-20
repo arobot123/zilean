@@ -1,0 +1,11 @@
+#!/bin/sh
+
+$HOME/bin/chkBmc $1 || exit
+
+source '/root/.config/accnt.info'
+
+if [ -n "$(ipmitool -I lanplus -H $1 -U $BMC_USER -P $BMC_PASSWD sdr | grep "RAID" | grep Temp)" ]  ; then
+	printf "%4c%s: %d\n" "    " RaidCard 1
+else
+	printf "%4c%s: %d\n" "    " RaidCard 0
+fi

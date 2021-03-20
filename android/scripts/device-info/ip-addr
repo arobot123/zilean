@@ -1,0 +1,4 @@
+#!/bin/sh
+set -e
+
+adb shell ip route get 1.2.3.4 | awk '{print $9; exit}'

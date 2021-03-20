@@ -1,0 +1,7 @@
+#!/bin/sh
+
+systemctl enable dhcpd
+systemctl enable tftp
+systemctl enable httpd
+systemctl enable xinetd
+systemctl enable rsyncd

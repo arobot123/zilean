@@ -1,0 +1,15 @@
+#!/bin/sh -e
+
+$HOME/bin/chkBmc $1 || exit
+
+status=$2
+[ -z $status ] &&
+exit 1
+[ $status != 'on' ] &&
+[ $status != 'off' ] &&
+[ $status != 'reset' ] &&
+exit 2
+
+source '/root/.config/accnt.info'
+
+ipmitool -H $1 -I lanplus -U $BMC_USER -P $BMC_PASSWD power $status
