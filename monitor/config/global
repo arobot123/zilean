@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# MONITOR_LIB_PATH
+echo $MONITOR_LIB_FILES | grep -q "$(realpath ${BASH_SOURCE[0]})" && return
+export MONITOR_LIB_FILES="$(realpath ${BASH_SOURCE[0]})":$MONITOR_LIB_FILES
+
+# PATH
+export MAIN_PATH=$(dirname $(dirname $(realpath ${BASH_SOURCE[0]})))
+export CONFIG_PATH=$MAIN_PATH/config
+export LIBS_PATH=$MAIN_PATH/libs
+export SBIN_PATH=$MAIN_PATH/sbin
+export LOGS_PATH=$MAIN_PATH/logs
+export OS_INFO_PATH=$MAIN_PATH/os-info
+export LIBS_DB_PATH=$LIBS_PATH/db
+export LIBS_DB_PY_PATH=$LIBS_DB_PATH/python3
+export LIBS_DB_SH_PATH=$LIBS_DB_PATH/shell
+
+# FILE
+export MAIN_LOG=$LOGS_PATH/log.log

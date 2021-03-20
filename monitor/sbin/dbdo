@@ -1,11 +1,4 @@
 #!/bin/sh
-set -e
 
 CUR_FILE_PATH=$(realpath $(dirname ${BASH_SOURCE[0]}))
 . $CUR_FILE_PATH/../libs/load
-
-INFO "Collect System OS Information"
-
-INFO "End."
-
-DEBUG $MONITOR_LIB_FILES

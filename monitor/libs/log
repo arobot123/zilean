@@ -1,13 +1,5 @@
 #!/bin/sh
 
-
-CUR_FILE_PATH=$(realpath $(dirname ${BASH_SOURCE[0]}))
-source $CUR_FILE_PATH/colors
-
-MAIN_LOG=$CUR_FILE_PATH/../logs/log.log
-exec 1>>$MAIN_LOG 2>&1
-
-
 timestamp() {
     echo $(date +"%Y-%m-%d %H:%M:%S")
 }
