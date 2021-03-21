@@ -1,0 +1,7 @@
+" VIM 基础配置
+source $HOME/.vim/config/basic.vim
+
+" VIM 插件管理器
+call plug#begin('~/.vim/plugged')
+Plug 'neoclide/coc.nvim',{'branch':'release'}
+call plug#end()
