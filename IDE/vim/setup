@@ -1,6 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 
-CUR_PATH=$(dirname $(realpath ${BASHSOURCE[0]}))
+CUR_PATH=$(dirname $(realpath ${BASH_SOURCE[0]}))
 TARGET_PATH=$HOME/.vim
 
 cd $CUR_PATH || exit 1
