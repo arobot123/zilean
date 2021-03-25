@@ -1,0 +1,50 @@
+# How to allocate free space to LVM2 volume
+
+## 删除旧的分区
+
+`fdisk /dev/sda` 对sda硬盘删除不想要的分区，如 /dev/sda5, /dev/sda4  
+
+```text
+p # 查看分区列表
+d # 删除分区, 指定5, 4 删除
+w # 保存修改
+```
+
+## 创建新的分区
+
+`fdisk /dev/sda` 将空闲的空间，新建统一的分区  
+
+```text
+p # 查看分区列表
+n # 新建分区，可以使用默认配置直接回车
+p # 查看分区列表
+w # 保存修改
+```
+
+刷新分区表, 执行`partprobe`  
+
+`df -h` 查看设备信息存在 /dev/sda4
+
+## 创建新的lvm pv
+
+```sh
+pvcreate /dev/sda4
+pvs # 查看到新的pv /dev/sda4
+```
+
+## vg扩展
+
+```sh
+vgextent os /dev/sda4  # os 为例vg名
+vgs # 查看到vg新增剩余空间
+```
+
+## 将pv分配给对应的lv
+
+```sh
+lvextend -L +60G /dev/mapper/os-var # +60G 为增加60GB，os-var 为对应的lvm2挂载点
+```
+
+## 更新分区信息
+
+`partprobe`
