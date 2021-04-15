@@ -3,3 +3,6 @@ ___
 
 ## vim
 个人平常开发习惯用vim。包括shell、python、html、css、javascript。  
+
+## accel-github
+加速github访问。根据主机接入wifi，确定对应github网站的IP地址，并增加到hosts。
