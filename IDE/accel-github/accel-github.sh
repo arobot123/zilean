@@ -12,4 +12,4 @@ wifi_ssid=$(iw $wlan_if info | grep ssid | cut -d' ' -f2-)
 cp /etc/hosts{.bak,}
 echo -e "\n#WIFI $wifi_ssid\n# github 加速" >> /etc/hosts
 echo "请稍等，正在给github访问加速..."
-node /root/bin/githubIp >> /etc/hosts
+node /root/bin/githubIp.js >> /etc/hosts

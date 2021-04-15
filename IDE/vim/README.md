@@ -23,7 +23,7 @@ VIM 轻量，且功能强大，自带配置，丰富插件，支持多种语言�
 执行部署脚本
 
 ```sh
-./setup
+./setup.sh
 ```
 
 等待进入vim编辑， 执行 `PlugInstall`  
