@@ -17,8 +17,8 @@ set number                          " 显示行号
 set relativenumber                  " 显示光标所在当前行号，其他行相对于该行的行号
 
 set cursorline                      " 突出显示当前行
-"set cursorcolumn                   " 突出显示当前列
-nmap <F6> :set cursorcolumn!<CR>
+set cursorlineopt=number,screenline
+set cursorcolumn                    " 突出显示当前列
 set showmatch                       " 显示括号匹配
 set hlsearch                        " 高亮显示搜索结果
 
@@ -28,9 +28,18 @@ set listchars=tab:>-,trail:-,precedes:«,extends:»
 set textwidth=80                    " 设置行宽
 set wrap                            " 设置自动换行（单行字符超过行宽）
 set linebreak                       " 设置遇到指定字符换行
+set iskeyword+=_,$,@,%,#,-          " 遇到指定字符不换行
 set wrapmargin=2                    " 指定折行处与编辑窗口右边缘之间空处的字符数
 set scrolloff=3                     " 垂直滚动时光标距离顶/底部行数
 set sidescrolloff=5                 " 水平滚动时光标距离行首/尾字符数(不折行时使用)
+
+set fillchars=vert:\ ,stl:\ ,stlnc:\ " 分割窗口间显示空白
+
+set showtabline=2                   " 显示标签栏
+set tabpagemax=15                   " 同时打开的标签页
+hi tablinefill ctermfg=LightGreen ctermbg=DarkGreen
+hi tabline ctermfg=Blue ctermbg=Yellow
+hi tablinesel ctermfg=Red ctermbg=Yellow
 
 set laststatus=2                    " 显示状态栏
 set showcmd                         " 状态栏显示正在输入的命令
@@ -50,8 +59,8 @@ hi FP cterm=none ctermfg=green ctermbg=0
 hi Normal ctermfg=252 ctermbg=none  " 背景透明
 
 
-set spell spelllang=en_us,cjk       " 英中日韩单词拼写检查
-nmap <F5> :set spell!<CR>
+set nospell
+set spelllang=en_us,cjk             " 英中日韩单词拼写检查
 
 filetype on                         " 开启文件类型检查，并载入该类型对应的缩进规则(如.py文件加载，$HOME/.vim/intent/python.vim)
 filetype indent on                  " 这里使用统一缩进
@@ -81,14 +90,9 @@ set autoread                        " 编辑时文件发生外部变更，给出
 set wildmenu                        " 命令模式下，底部操作指令按Tab补全，第1次按显示所有匹配指令清单，第2次按以次选择各指令
 set wildmode=longest:list,full
 
-nmap <TAB> :bn<CR>                  " 多文件打开Tab切换
 
-nmap <F7> :set hlsearch!<CR>        " 切换高亮
-nmap <F8> :%retab!<CR>              " 将已有Tab替换成空格
 
 set foldenable
 set foldmethod=manual
 
-map +y "+y                          " 复制到系统剪切板
-map +p "+p                          " 从系统剪切板粘贴
-nmap <F2> :set number!&&set relativenumber!<CR>
+set clipboard+=unnamed              " y,p操作与系统粘贴板共享。配合vimx使用(安装vim-X11)
