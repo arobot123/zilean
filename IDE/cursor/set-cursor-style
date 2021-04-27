@@ -1,0 +1,9 @@
+#!/bin/sh
+
+
+sudo dnf install -y inkscape
+
+git clone https://github.com/varlesh/volantes-cursors.git
+cd volantes-cursors
+make build
+sudo make install
