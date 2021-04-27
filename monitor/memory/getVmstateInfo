@@ -1,0 +1,35 @@
+#!/bin/sh
+
+
+interval=${1:-1}
+times=${2:-1}
+
+[ $interval -ge 1 -a $times -ge 1 ] || exit
+
+command="vmstat --wide $interval $times" # 统计命令
+
+#items=(`$command | head -n2 | awk 'NR==2'`) # 统计项
+items=(
+    procs_running_number procs_blocked_number
+    memory_swaped_sizeKB memory_free_sizeKB memory_buff_sizeKB memory_cache_sizeKB
+    swap_in_ram_number swap_out_ram_number
+    blocks_in_number blocks_out_number
+    sys_interrupt_number sys_context_switch_number
+    cpu_total_time_percent cpu_system_time_percent cpu_idle_time_percent cpu_wait_io_time_percent virtualbox_time_percent
+)
+
+current=1
+$command |
+    while read line
+    do
+        echo $line | grep -q -iE -- '----|memory|free' && continue
+        line=(`echo $line`)
+        echo "show_$current:"
+        for index in ${!items[@]}
+        do
+            key=${items[$index]}
+            value=${line[$index]}
+            echo "    $key: $value"
+        done
+        current=$((current + 1))
+    done

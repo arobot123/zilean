@@ -1,0 +1,17 @@
+#!/bin/sh
+
+
+command='free --lohi --wide --total --human --si' # 统计命令
+
+items=(`$command | head -n1`) # 统计项
+$command | tail -n5 | # 统计数据
+    while read line
+    do
+        type=$(echo $line | cut -d: -f1)
+        statistics=(`echo $line | cut -d: -f2-`)
+        echo $type:
+        for index in ${!statistics[@]}
+        do
+            echo -e "    ${items[$index]}: ${statistics[$index]}"
+        done
+    done
