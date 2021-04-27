@@ -1,4 +1,0 @@
-#!/bin/sh
-
-CUR_FILE_PATH=$(realpath $(dirname ${BASH_SOURCE[0]}))
-. $CUR_FILE_PATH/../libs/load
