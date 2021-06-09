@@ -1,0 +1,20 @@
+#!/bin/bash
+
+[ -n "$PATH_MAIN" ] ||
+PATH_MAIN=$(git rev-parse --show-toplevel 2>/dev/null || dirname $(dirname $(realpath ${BASH_SOURCE[0]})))
+PATH_BIN=$PATH_MAIN/bin
+PATH_SBIN=$PATH_MAIN/sbin
+PATH_LIBS=$PATH_MAIN/libs
+PATH_LOGS=$PATH_MAIN/logs
+PATH_TOOLS=$PATH_MAIN/tools
+PATH_TEST=$PATH_MAIN/test
+
+for f in $(ls $PATH_LIBS)
+do
+    . $PATH_LIBS/$f
+done
+
+for f in $(ls $PATH_BIN)
+do
+    . $PATH_BIN/$f
+done

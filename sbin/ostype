@@ -1,0 +1,17 @@
+#!/bin/bash
+
+cmd="ping -c1 -W1 127.0.0.1 | grep 'ttl=' | sed 's#.*ttl=\([0-9]*\).*#\1#g'"
+
+length=$(eval $cmd)
+if [ "$length" -eq 64 ] ;then
+    echo "127.0.0.1 LINUX"
+elif [ "$length" -eq 128 ] ;then
+    echo "127.0.0.1 WIN2K/NT"
+elif [ "$length" -eq 32 ] ;then
+    echo "127.0.0.1 WINDOWS系列"
+elif [ "$length" -eq 255 ] ;then
+    echo "127.0.0.1 UNIX系列"
+else
+    echo "127.0.0.1 UNKNOWN"
+    echo $cmd
+fi

@@ -1,19 +1,17 @@
-#!/bin/sh
-set -e
+#!/bin/bash
 
-repos_path=/c
-authors=('angus_robot' 'szchao' 'shizhichao' 'Shi Zhichao')
-output=$HOME/code_stat
+PATH_MAIN=$(git rev-parse --show-toplevel 2>/dev/null || dirname $(dirname $(realpath ${BASH_SOURCE[0]})))
+. $PATH_MAIN/sbin/load
 
-> $output
-for repo in $(ls $repos_path)
+repos_path=$1
+for user in 'angus_robot@163.com'
 do
-	echo "repo: $repo" >> $output
-	for user in ${authors[@]}
-	do
-		echo -e "\tuser: $user" >> $output
-		[ -d "$repos_path/$repo/.git" ] || continue
-		cd $repos_path/$repo
-		git log --author="$user" --pretty=tformat: --numstat | gawk '{add += $1; subs += $2; loc += $1 - $2} END {printf "\tadded:%s deleted:%s total:%s\n",add,subs,loc}' >> $output
-	done
+    echo $user:
+    for repo in $(findGitRepo $repos_path)
+    do
+        cd $repo
+        res=(`git log --author="$user" --pretty=tformat: --numstat | gawk '{add += $1; subs += $2; loc += $1 - $2} END {printf "%s +%s -%s\n",loc,add,subs}'`)
+        [ "${#res[@]}" -eq 0 ] && continue
+        echo -e "  $repo:\t${res[@]}"
+    done
 done

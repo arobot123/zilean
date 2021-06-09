@@ -16,6 +16,9 @@ ___
 
 ## 部署
 
+- git installed
+- DONOT DELETE .git layout
+
 ## 使用
 
 ## TODO

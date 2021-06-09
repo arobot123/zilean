@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="author" content="angus_robot@163.com">
+        <meta name="description" content="This document shows web code snippets often used.">
+        <title id="js-html-doc-title"></title>
+        <link rel="shortcut icon" href="img/favicon.ico">
+        <link rel="stylesheet" href="css/style.css">
+        <meta property="og:title" content="Web Code Snippets" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="file:///var/code/zilean/web-snippets/index.html" />
+        <meta property="og:image" content="file:///var/code/zilean/web-snippets/img/favicon.ico" />
+        <meta property="og:description" content="Site shows web code snippets often used" />
+    </head>
+    <body>
+        <h1>前端快速查询</h1>
+        <p>
+            本页面列出了个人对WEB的理解。并学习总结列出常用操作代码块示例，便于开发查询。
+        </p>
+        <p>
+            Web展示的是什么？我个人觉得Web展示的其实都是在线的文档、流数据等。
+            Web页面就是一张白纸，每个人都可以按照自己的想法和创意，根据世界约定的规则去展示自己的想法和需要表现的内容（HTML）。
+            至于展现的是否美观、简洁、丰富等，需要用到绘画工具——CSS。
+            如果不满足于静态文档，要想页面能和自己发生互动、和互联网上其他资源发生互动，就需要用JavaScript这些工具了。
+        </p>
+        <p>
+            前端开发其实就是创作的过程，我们展示自己所想，我们遵从相同的规则，世界运转有序。
+        </p>
+        <p class="ps">
+            PS: 为了使工作变得轻松，尽量让各部分做好自己的本职工作，不要让他们相互纠缠，这样会很头痛。。。
+        </p>
+        <h2 id="menu">目录</h2>
+        <a href="#submenu-suggest" title="学习推荐">一.学习推荐</a><br/>
+        <a href="#submenu-snippet" title="常用代码块">二.常用代码块</a><br/>
+        <a href="#submenu-link" title="工具链接">三.工具链接</a>
+        <h2 id="submenu-suggest">一.学习推荐<sub><a href="#menu" title="回到主目录">回到主目录</a></sub></h2>
+        <ul>
+            <li><a href="https://developer.mozilla.org/zh-CN/docs/Web" target="_blank" title="MDN Web开发者文档">MDN教程</a></li>
+            <li><a href="http://www.divcss5.com" target="_blank" title="divcss5教程网">CSS教程网</a></li>
+        </ul>
+        <h2 id="submenu-snippet">二.常用代码块<sub><a href="#menu" title="回到主目录">回到主目录</a></sub></h2>
+        <ol>
+            <li>HTML基本结构模板<sub><a href="#submenu-snippet" title="回到标题">回到标题</a></sub></li>
+            <div>
+                <textarea>
+                    <!DOCTYPE html>
+                    <html lang="zh-CN">
+                        <head>
+                            <meta charset="utf-8" />
+                            <meta name="author" content="Author Contact Information" />
+                            <!-- description 可用于搜索引擎显示 -->
+                            <meta name="description" content="Web Page Description" />
+                            <!-- 网页图标 -->
+                            <link rel="shortcut icon" href="relevant/path/of/favicon.ico">
+                            <!-- 网页样式 -->
+                            <link rel="stylesheet" href="relevant/path/of/style.css">
+                            <!-- Open Graph Protol 展示社交图信息 -->
+                            <meta property="og:title" content="网站标题" />
+                            <meta property="og:type" content="网站类型" />
+                            <meta property="og:url" content="网站链接" />
+                            <meta property="og:image" content="网站图标" />
+                            <meta property="og:description" content="网站描述" />
+                        </head>
+
+                        <body>
+                            <h1>网页内容标题</h1>
+                            <p>段落内容</p>
+                            <h2>二级标题</h2>
+                            <p>段落内容</p>
+                            <h3>三级标题</h3>
+                            <p>段落内容</p>
+                        </body>
+                        <!-- 末尾加载避免因js脚本错误导致网页内容加载失败 -->
+                        <script type="text/javascript" src="relevant/path/of/main.js"></script>
+                    </html>
+                </textarea>
+                <button type="button" class="copyButton" title="点击复制" onload="BodyOnLoad();">copy</button>
+            </div>
+            <br/>
+            <li>声明文档类型<sub><a href="#submenu-snippet" title="回到标题">回到标题</a></sub></li>
+            <div>
+                <textarea>
+                    <!DOCTYPE html>
+                </textarea>
+                <button type="button" class="copyButton" title="点击复制" onload="BodyOnLoad();">copy</button>
+            </div>
+            <br/>
+            <li>根元素<sub><a href="#submenu-snippet" title="回到标题">回到标题</a></sub></li>
+            <div>
+                <textarea>
+                    <html>...(页面代码)</html>
+                </textarea>
+                <button type="button" class="copyButton" title="点击复制" onload="BodyOnLoad();">copy</button>
+            </div>
+            <br/>
+            <li>头部元素<sub><a href="#submenu-snippet" title="回到标题">回到标题</a></sub></li>
+        <h2 id="submenu-link">三. 工具链接<sub><a href="#menu" title="回到主目录">回到主目录</a></sub></h2>
+    </body>
+    <script type="text/javascript" src="js/main.js"></script>
+</html>

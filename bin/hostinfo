@@ -1,0 +1,37 @@
+#!/bin/bash
+
+HOST_NAME=$(hostname)
+HOST_ARCH=$(uname -i)
+
+OS_TYPE=$(uname)
+OS_NAME=$(. /etc/os-release && echo $NAME)
+OS_VERSION=$(. /etc/os-release && echo $VERSION)
+OS_ARCH=$(uname -m)
+OS_KERNEL=$(uname -r)
+
+CPU_VENDOR=$(grep -i 'vendor_id' /proc/cpuinfo | uniq | awk '{print $3;exit}')
+CPU_MODEL=$(grep -i 'model name' /proc/cpuinfo | uniq | sed 's#model name.*:\s*##g')
+CPU_CORES=$(grep -i 'processor' /proc/cpuinfo | wc -l)
+CPU_BITS=$(getconf LONG_BIT)
+
+if [[ "$USER" = 'root' ]] ;then
+    SUDO=
+else
+    SUDO=sudo
+fi
+if command -v apt > /dev/null ;then
+    alias ai="$SUDO apt install"
+    alias au="$SUDO apt update"
+elif command -v apt-get > /dev/null ;then
+    alias ai="$SUDO apt-get install"
+    alias au="$SUDO apt-get update"
+elif command -v dnf > /dev/null ;then
+    alias ai="$SUDO dnf install"
+    alias au="$SUDO dnf update"
+elif command -v yum > /dev/null ;then
+    alias ai="$SUDO yum install"
+    alias au="$SUDO yum update"
+else
+    echo "alias ai not setted!"
+    exit 1
+fi

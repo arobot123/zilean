@@ -1,0 +1,12 @@
+#!/bin/bash
+
+PATH_MAIN=$(git rev-parse --show-toplevel 2>/dev/null || dirname $(dirname $(realpath ${BASH_SOURCE[0]})))
+. $PATH_MAIN/sbin/load
+
+FILE_LOG='angus-20210608.log'
+
+DEBUG "debug level sample"
+INFO "info level sample"
+WARN "warn level sample"
+ERROR "error level sample"
+FATAL "fatal level sample"

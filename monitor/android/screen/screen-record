@@ -1,7 +1,0 @@
-#!/bin/sh
-set -e
-
-output=$1
-[ -n "$output" ] || exit 1
-
-adb shell screenrecord $output

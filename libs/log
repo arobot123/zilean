@@ -1,22 +1,50 @@
-#!/bin/sh
+#!/bin/bash
 
 timestamp() {
     echo $(date +"%Y-%m-%d %H:%M:%S")
 }
 
 DEBUG() {
-    echo -e \[$(timestamp)\] ${GREEN}\[DEBUG\] ${WHITE}"$*"
+    if [ -n "$FILE_LOG" ] ;then
+        [ -f $PATH_LOGS/$FILE_LOG ] || > $PATH_LOGS/$FILE_LOG
+        echo -e "[$(timestamp)] ${CYAN}[DEBUG] $@${WHITE}" | tee -a $PATH_LOGS/$FILE_LOG
+    else
+        echo -e "[$(timestamp)] ${CYAN}[DEBUG] $@${WHITE}"
+    fi
 }
 
 INFO() {
-    echo -e \[$(timestamp)\] ${YELLOW}\[INFO\] ${WHITE}"$*"
+    if [ -n "$FILE_LOG" ] ;then
+        [ -f $PATH_LOGS/$FILE_LOG ] || > $PATH_LOGS/$FILE_LOG
+        echo -e "[$(timestamp)] ${GREEN}[INFO] $@${WHITE}" | tee -a $PATH_LOGS/$FILE_LOG
+    else
+        echo -e "[$(timestamp)] ${GREEN}[INFO] $@${WHITE}"
+    fi
+}
+
+WARN() {
+    if [ -n "$FILE_LOG" ] ;then
+        [ -f $PATH_LOGS/$FILE_LOG ] || > $PATH_LOGS/$FILE_LOG
+        echo -e "[$(timestamp)] ${YELLOW}[WARN] $@${WHITE}" | tee -a $PATH_LOGS/$FILE_LOG
+    else
+        echo -e "[$(timestamp)] ${YELLOW}[WARN] $@${WHITE}"
+    fi
 }
 
 ERROR() {
-    echo -e \[$(timestamp)\] ${RED}\[ERROR\] ${WHITE}"$*"
+    if [ -n "$FILE_LOG" ] ;then
+        [ -f $PATH_LOGS/$FILE_LOG ] || > $PATH_LOGS/$FILE_LOG
+        echo -e "[$(timestamp)] ${RED}[ERROR] $@${WHITE}" | tee -a $PATH_LOGS/$FILE_LOG
+    else
+        echo -e "[$(timestamp)] ${RED}[ERROR] $@${WHITE}"
+    fi
 }
 
 FATAL() {
-    echo -e \[$(timestamp)\] ${RED}${BOLD}\[FATAL\] ${WHITE}"$*"
+    if [ -n "$FILE_LOG" ] ;then
+        [ -f $PATH_LOGS/$FILE_LOG ] || > $PATH_LOGS/$FILE_LOG
+        echo -e "[$(timestamp)] ${RED}${BOLD}[FATAL] $@${WHITE}" | tee -a $PATH_LOGS/$FILE_LOG
+    else
+        echo -e "[$(timestamp)] ${RED}${BOLD}[FATAL] $@${WHITE}"
+    fi
 }
-

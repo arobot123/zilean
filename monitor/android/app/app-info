@@ -1,7 +1,0 @@
-#!/bin/sh
-set -e
-
-app=$1
-./packages | grep -w "$app" || exit 1
-
-adb shell dumpsys package $app

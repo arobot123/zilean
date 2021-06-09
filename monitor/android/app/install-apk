@@ -1,7 +1,0 @@
-#!/bin/sh
-set -e
-
-apk=$1
-[ -f "$apk" ] || exit 1
-
-adb install $apk

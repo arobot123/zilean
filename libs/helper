@@ -1,0 +1,14 @@
+#!/bin/bash
+
+findGitRepo() {
+    target_path=$1
+    [ -n "$target_path" ] || return 1
+    if [ -d "$target_path/.git" ] ;then
+        echo $target_path
+    else
+        for sub in $(ls $target_path)
+        do
+            [ -d "$target_path/$sub/.git" ] && echo $target_path/$sub
+        done
+    fi
+}
