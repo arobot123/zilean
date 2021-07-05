@@ -1,0 +1,3 @@
+#!/bin/bash
+
+echo "os_arch: $(uname -i 2>/dev/null || arch)"

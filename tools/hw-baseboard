@@ -1,0 +1,16 @@
+#!/bin/bash
+
+res=$(dmidecode -tbaseboard)
+
+manufacturer=$(echo "$res" | grep -w -iE 'Manufacturer:' | sed 's#.*: *\(.*\)#\1#g')
+product_name=$(echo "$res" | grep -w -iE 'Product Name:' | sed 's#.*: *\(.*\)#\1#g')
+version=$(echo "$res" | grep -w -iE 'Version:' | sed 's#.*: *\(.*\)#\1#g')
+SN=$(echo "$res" | grep -w -iE 'Serial Number:' | sed 's#.*: *\(.*\)#\1#g')
+
+cat <<EOF
+baseboard:
+  manufacturer: $manufacturer
+  product_name: $product_name
+  version: $version
+  SN: $SN
+EOF

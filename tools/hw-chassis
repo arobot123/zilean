@@ -1,0 +1,18 @@
+#!/bin/bash
+
+res=$(dmidecode -t chassis)
+
+manufacturer=$(echo "$res" | grep -w -iE 'Manufacturer:' | sed 's#.*: *\(.*\)#\1#g')
+type=$(echo "$res" | grep -w -iE 'Type:' | sed 's#.*: *\(.*\)#\1#g')
+version=$(echo "$res" | grep -w -iE 'Version:' | sed 's#.*: *\(.*\)#\1#g')
+SN=$(echo "$res" | grep -w -iE 'Serial Number:' | sed 's#.*: *\(.*\)#\1#g')
+power_number=$(echo "$res" | grep -w -iE 'Number Of Power Cords:' | sed 's#.*: *\(.*\)#\1#g')
+
+cat <<EOF
+chassis:
+  manufacturer: $manufacturer
+  type: $type
+  version: $version
+  SN: $SN
+  power_number: $power_number
+EOF

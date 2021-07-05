@@ -1,0 +1,50 @@
+#!/bin/bash
+
+res=$(free -lwht)
+
+total=$(echo "$res" | grep -w 'Total:' | awk '{print $2;exit}')
+used=$(echo "$res" | grep -w 'Total:' | awk '{print $3;exit}')
+free=$(echo "$res" | grep -w 'Total:' | awk '{print $4;exit}')
+mem_total=$(echo "$res" | grep -w 'Mem:' | awk '{print $2;exit}')
+mem_used=$(echo "$res" | grep -w 'Mem:' | awk '{print $3;exit}')
+mem_free=$(echo "$res" | grep -w 'Mem:' | awk '{print $4;exit}')
+mem_shared=$(echo "$res" | grep -w 'Mem:' | awk '{print $5;exit}')
+mem_buffers=$(echo "$res" | grep -w 'Mem:' | awk '{print $6;exit}')
+mem_cache=$(echo "$res" | grep -w 'Mem:' | awk '{print $7;exit}')
+mem_available=$(echo "$res" | grep -w 'Mem:' | awk '{print $8;exit}')
+swap_total=$(echo "$res" | grep -w 'Swap:' | awk '{print $2;exit}')
+swap_used=$(echo "$res" | grep -w 'Swap:' | awk '{print $3;exit}')
+swap_free=$(echo "$res" | grep -w 'Swap:' | awk '{print $4;exit}')
+high_total=$(echo "$res" | grep -w 'High:' | awk '{print $2;exit}')
+high_used=$(echo "$res" | grep -w 'High:' | awk '{print $3;exit}')
+high_free=$(echo "$res" | grep -w 'High:' | awk '{print $4;exit}')
+low_total=$(echo "$res" | grep -w 'Low:' | awk '{print $2;exit}')
+low_used=$(echo "$res" | grep -w 'Low:' | awk '{print $3;exit}')
+low_free=$(echo "$res" | grep -w 'Low:' | awk '{print $4;exit}')
+
+cat <<EOF
+os_memory:
+  total: $total
+  used: $used
+  free: $free
+  Mem:
+    total: $mem_total
+    used: $mem_used
+    free: $mem_free
+    shared: $mem_shared
+    buffers: $mem_buffers
+    cache: $mem_cache
+    available: $mem_available
+  Swap:
+    total: $swap_total
+    used: $swap_used
+    free: $swap_free
+  High:
+    total: $high_total
+    used: $high_used
+    free: $high_free
+  Low:
+    total: $low_total
+    used: $low_used
+    free: $low_free
+EOF

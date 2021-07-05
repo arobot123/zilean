@@ -1,0 +1,28 @@
+#!/bin/bash
+
+res=$(dmidecode -t memory)
+max_capacity=$(echo "$res" | grep -w -iE 'Maximum Capacity:' | sed 's#.*: *\(.*\)#\1,#g' | xargs | sed 's#,$##g')
+card_number=$(echo "$res" | grep -w -iE 'Number Of Devices:' | sed 's#.*: *\(.*\)#\1,#g' | xargs | sed 's#,$##g')
+card_size=$(echo "$res" | grep -w -iE 'Size:' | sed 's#.*: *\(.*\)#\1,#g' | xargs | sed 's#,$##g')
+card_data_width=$(echo "$res" | grep -w -iE 'Data Width:' | sed 's#.*: *\(.*\)#\1,#g' | xargs | sed 's#,$##g')
+card_locator=$(echo "$res" | grep -w -iE '[^a-zA-Z]Locator:' | sed 's#.*: *\(.*\)#\1,#g' | xargs | sed 's#,$##g')
+card_type=$(echo "$res" | grep -w -iE '[^a-zA-Z]Type:' | sed 's#.*: *\(.*\)#\1,#g' | xargs | sed 's#,$##g')
+card_type_detail=$(echo "$res" | grep -w -iE 'Type Detail:' | sed 's#.*: *\(.*\)#\1,#g' | xargs | sed 's#,$##g')
+card_speed=$(echo "$res" | grep -w -iE '[^a-zA-Z]Speed:' | sed 's#.*: *\(.*\)#\1,#g' | xargs | sed 's#,$##g')
+card_manufacturer=$(echo "$res" | grep -w -iE 'Manufacturer:' | sed 's#.*: *\(.*\)#\1,#g' | xargs | sed 's#,$##g')
+card_SN=$(echo "$res" | grep -w -iE 'Serial Number:' | sed 's#.*: *\(.*\)#\1,#g' | xargs | sed 's#,$##g')
+card_form_factor=$(echo "$res" | grep -w -iE 'Form Factor:' | sed 's#.*: *\(.*\)#\1,#g' | xargs | sed 's#,$##g')
+cat <<EOF
+memory:
+  max_capacity: $max_capacity
+  card_number: $card_number
+  card_size: $card_size
+  card_data_width: $card_data_width
+  card_locator: $card_locator
+  card_type: $card_type
+  card_type_detail: $card_type_detail
+  card_speed: $card_speed
+  card_manufacturer: $card_manufacturer
+  card_SN: $card_SN
+  card_form_factor: $card_form_factor
+EOF

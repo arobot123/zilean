@@ -1,0 +1,13 @@
+#!/bin/bash
+
+res=$(dmidecode -t bios)
+vendor=$(echo "$res" | grep -w -iE 'vendor:' | sed 's#.*: \(.*\)#\1#g')
+version=$(echo "$res" | grep -w -iE 'version:' | sed 's#.*: \(.*\)#\1#g')
+release_date=$(echo "$res" | grep -w -iE 'release date:' | sed 's#.*: \(.*\)#\1#g')
+
+cat <<EOF
+bios:
+  vendor: $vendor
+  version: $version
+  release_date: $release_date
+EOF

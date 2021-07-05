@@ -1,0 +1,29 @@
+#!/bin/bash
+
+echo "network:"
+for iface in $(nmcli device | grep -w -iE 'connected|已连接' | awk '{print $1}')
+do
+    res=$(nmcli device show $iface)
+    type=$(echo "$res" | grep -w -iE 'GENERAL.TYPE:' | sed 's#.*: *\(.*\)#\1#g')
+    mac=$(echo "$res" | grep -w -iE 'GENERAL.HWADDR:' | sed 's#[^:]*: *\(.*\)#\1#g')
+    mtu=$(echo "$res" | grep -w -iE 'GENERAL.MTU:' | sed 's#.*: *\(.*\)#\1#g')
+    state=$(echo "$res" | grep -w -iE 'GENERAL.STATE:' | sed 's#.*: *\(.*\)#\1#g')
+    v4addr=$(echo "$res" | grep -w -iE 'IP4.ADDRESS' | sed 's#.*: *\(.*\)#\1#g')
+    v4gateway=$(echo "$res" | grep -w -iE 'IP4.GATEWAY:' | sed 's#.*: *\(.*\)#\1#g')
+    v6addr=$(echo "$res" | grep -w -iE 'IP6.ADDRESS' | sed 's#[^:]*: *\(.*\)#\1#g')
+    v6gateway=$(echo "$res" | grep -w -iE 'IP6.GATEWAY:' | sed 's#.*: *\(.*\)#\1#g')
+
+    cat <<EOF
+  $iface:
+    state: $state
+    type: $type
+    mac: $mac
+    mtu: $mtu
+    ipv4:
+      address: $v4addr
+      gateway: $v4gateway
+    ipv6:
+      address: $v6addr
+      gateway: $v6gateway
+EOF
+done

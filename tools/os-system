@@ -1,0 +1,20 @@
+#!/bin/bash
+
+res=$(dmidecode -t system)
+
+manufacturer=$(echo "$res" | grep -w -iE 'Manufacturer:' | sed 's#.*: *\(.*\)#\1#g')
+product_name=$(echo "$res" | grep -w -iE 'Product Name:' | sed 's#.*: *\(.*\)#\1#g')
+version=$(echo "$res" | grep -w -iE 'Version:' | sed 's#.*: *\(.*\)#\1#g')
+SN=$(echo "$res" | grep -w -iE 'Serial Number:' | sed 's#.*: *\(.*\)#\1#g')
+UUID=$(echo "$res" | grep -w -iE 'UUID:' | sed 's#.*: *\(.*\)#\1#g')
+boot_status=$(echo "$res" | grep -w -iE 'System Boot|Status:' | tail -n1 | sed 's#.*: *\(.*\)#\1#g')
+
+cat <<EOF
+system:
+  manufacturer: $manufacturer
+  product_name: $product_name
+  version: $version
+  SN: $SN
+  UUID: $UUID
+  boot_status: $boot_status
+EOF

@@ -1,0 +1,35 @@
+#!/bin/bash
+
+res=$(dmidecode -t processor)
+socket_design=$(echo "$res" | grep -w -iE 'Socket Designation:' | sed 's#.*: *\(.*\)#\1#g')
+type=$(echo "$res" | grep -w -iE 'Type:' | sed 's#.*: *\(.*\)#\1#g')
+family=$(echo "$res" | grep -w -iE 'Family:' | sed 's#.*: *\(.*\)#\1#g')
+manufacturer=$(echo "$res" | grep -w -iE 'Manufacturer:' | sed 's#.*: *\(.*\)#\1#g')
+id=$(echo "$res" | grep -w -iE 'ID:' | sed 's#.*: *\(.*\)#\1#g')
+version=$(echo "$res" | grep -w -iE 'Version:' | sed 's#.*: *\(.*\)#\1#g')
+voltage=$(echo "$res" | grep -w -iE 'Voltage:' | sed 's#.*: *\(.*\)#\1#g')
+current_speed=$(echo "$res" | grep -w -iE 'Current Speed:' | sed 's#.*: *\(.*\)#\1#g')
+max_speed=$(echo "$res" | grep -w -iE 'Max Speed:' | sed 's#.*: *\(.*\)#\1#g')
+core_number=$(echo "$res" | grep -w -iE 'Max Speed:' | sed 's#.*: *\(.*\)#\1#g')
+core_enabled=$(echo "$res" | grep -w -iE 'Core Enabled:' | sed 's#.*: *\(.*\)#\1#g')
+thread_number=$(echo "$res" | grep -w -iE 'Thread Count:' | sed 's#.*: *\(.*\)#\1#g')
+SN=$(echo "$res" | grep -w -iE 'Serial Number:' | sed 's#.*: *\(.*\)#\1#g')
+external_clock=$(echo "$res" | grep -w -iE 'External Clock:' | sed 's#.*: *\(.*\)#\1#g')
+
+cat <<EOF
+processor:
+  socket_design: $socket_design
+  type: $type
+  family: $family
+  manufacturer: $manufacturer
+  id: $id
+  version: $version
+  voltage: $voltage
+  current_speed: $current_speed
+  max_speed: $max_speed
+  core_number: $core_number
+  core_enabled: $core_enabled
+  thread_number: $thread_number
+  SN: $SN
+  external_clock: $external_clock
+EOF

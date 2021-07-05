@@ -1,0 +1,3 @@
+#!/bin/bash
+
+echo "os_version: $(. /etc/os-release && echo $VERSION_ID)"
